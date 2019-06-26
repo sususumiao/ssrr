@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- 头部组件 -->
-    <Header/>
+    <Header></Header>
     <!-- 内容占位组件 -->
-    <nuxt />
+    <nuxt></nuxt>
     <!-- 脚部组件 -->
-    <Footer/>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -33,5 +33,8 @@ ul,li,ol{
 a{
   color: #666;
   text-decoration: none;
+}
+em,i{
+  font-style: normal
 }
 </style>    
