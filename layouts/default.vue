@@ -29,6 +29,8 @@ export default {
 }
 ul,li,ol{
   list-style: none;
+  padding: 0px;
+  margin: 0px;
 }
 a{
   color: #666;

@@ -1,56 +1,42 @@
 <template>
     <header class="header">
-        <el-row type="flex" justify="space-between" class="main">
-
-            <!-- logo -->
+        <el-row type="flex" class="main" justify="space-between">
+            <!-- logo模块 -->
             <div class="logo">
-                <nuxt-link to="/">
-                    <img src="http://157.122.54.189:9093/images/logo.jpg" alt="">
+                <nuxt-link to='/'>
+                <img src="http://157.122.54.189:9093/images/logo.jpg" alt="">
                 </nuxt-link>
             </div>
-            <!-- 菜单栏 -->
-            <el-row type="flex" class="navs">
+            <!-- 导航栏模块 -->
+            <el-row type="flex" class="navs"> 
                 <nuxt-link to="/">首页</nuxt-link>
                 <nuxt-link to="/post">旅游攻略</nuxt-link>
                 <nuxt-link to="/hotel">酒店</nuxt-link>
-                <nuxt-link to="/air">国内机票</nuxt-link>  
+                <nuxt-link to="/air">国内机票</nuxt-link>
             </el-row>
-            <!-- 登录/用户信息 -->
-            <el-row type="flex" align="middle">
-
-                <!-- 如果用户存在则展示用户信息，用户数据来自store -->
-                <el-dropdown v-if="false">
-                    <el-row type="flex" align="middle" class="el-dropdown-link">
-                        <nuxt-link to="#">
-                            <img src="http://157.122.54.189:9093/images/pic_sea.jpeg"/>
-                            用户名
-                        </nuxt-link>
-                        <i class="el-icon-caret-bottom el-icon--right"></i>
-                    </el-row>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>
-                           <nuxt-link to="#">个人中心</nuxt-link>
-                        </el-dropdown-item>
-                        <el-dropdown-item>
-                            <div @click="handleLogout">退出</div> 
-                        </el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-
-                <!-- 不存在用户信息展示登录注册链接 -->
-                <nuxt-link to="/user/login" class="account-link" v-else>
-                    登录 / 注册 
-                </nuxt-link>
-            </el-row>
+            <!-- 个人信息模块 -->
+            <div class="header-right">
+                <div v-if="true">
+                    <el-dropdown>
+                        <span class="el-dropdown-link">
+                            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt="">
+                            村口熊二
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>个人中心</el-dropdown-item>
+                            <el-dropdown-item>退出</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+                 <div class="login-link" v-else>登录 / 注册</div>
+            </div>
         </el-row>
     </header>
 </template>
 <script>
 export default {
-    methods: {
-        // 用户退出
-        handleLogout(){},
-    }
+
 }
 </script>
 <style scoped lang="less">
@@ -59,7 +45,7 @@ export default {
         line-height:60px;
         background:#fff;
         border-bottom: 1px #ddd solid;
-        box-shadow:0 3px 0 #f5f5f5;
+        box-shadow:0 3px 3px #f5f5f5;
         box-sizing: border-box;
 
         .main{
