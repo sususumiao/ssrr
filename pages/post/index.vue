@@ -42,7 +42,7 @@
       <!-- 右侧内容 -->
       <div class="post-wrapper">
         <!-- 搜索框 -->
-        <el-input placeholder="请输入想去的地方，比如：“广州”" class="input-with-select">
+        <el-input placeholder="请输入想去的地方，比如：“广州”" class="input-with-select" v-model="searchValue">
           <el-button slot="append" icon="el-icon-search" type="success"></el-button>
         </el-input>
         <!-- 推荐关键字 -->
@@ -78,19 +78,25 @@ export default {
       //   子菜单是否显示
       menusShow: false,
       //   获取子菜单索引
-      menusIndex: ""
+      menusIndex: "",
+      // 搜索框的内容
+      searchValue:""
     };
   },
   components: {
     PostCard
   },
   mounted() {
+    // 搜索框内容与vuex里
+    console.log(this.$store.state.post.searchValue)
+    this.searchValue = this.$store.state.post.searchValue
     this.$axios({
-      url: "/posts/cities"
+      url: "/posts/cities",
+      params:this.searchValue
     }).then(result => {
       const { data } = result.data;
       this.menusList = data;
-      console.log(data);
+      // console.log(data);
     });
   },
   methods: {

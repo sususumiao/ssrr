@@ -16,16 +16,18 @@
             </el-row>
             <!-- 个人信息模块 -->
             <div class="header-right">
-                <div v-if="false">
+                <div v-if="$store.state.user.userInfo.token">
                     <el-dropdown>
                         <span class="el-dropdown-link">
-                            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt="">
-                            村口熊二
+                            <img :src="$axios.defaults.baseURL+$store.state.user.userInfo.user.defaultAvatar" alt="">
+                            {{this.$store.state.user.userInfo.user.nickname}}
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>个人中心</el-dropdown-item>
-                            <el-dropdown-item>退出</el-dropdown-item>
+                            <el-dropdown-item>
+                                <div @click="handleLoginExitSubmit">退出</div>
+                            </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
@@ -38,7 +40,11 @@
 </template>
 <script>
 export default {
-
+    methods:{
+        handleLoginExitSubmit(){
+            this.$store.commit('user/setUserInfo')
+        }
+    }
 }
 </script>
 <style scoped lang="less">

@@ -76,7 +76,8 @@ export default {
     },
     // 搜索时触发的时事
     handleSearch(){
-      const url = this.options[this.currentOption].pageUrl + this.searchValue;
+      this.$store.commit('post/setSearchValue',this.searchValue)
+      const url = this.options[this.currentOption].pageUrl + this.$store.state.post.searchValue;
       this.$router.push(url)
     }
   },
