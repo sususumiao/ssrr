@@ -39,4 +39,15 @@ a{
 em,i{
   font-style: normal
 }
+.clearfix::after {
+	content: '.';
+	display: block;
+	clear: both;
+	visibility: hidden;
+	height: 0;
+	line-height: 0;
+}
+.clearfix {
+	*zoom: 1;
+}
 </style>    

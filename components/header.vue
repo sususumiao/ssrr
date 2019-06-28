@@ -16,7 +16,7 @@
             </el-row>
             <!-- 个人信息模块 -->
             <div class="header-right">
-                <div v-if="true">
+                <div v-if="false">
                     <el-dropdown>
                         <span class="el-dropdown-link">
                             <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt="">
@@ -29,7 +29,9 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
-                 <div class="login-link" v-else>登录 / 注册</div>
+                <nuxt-link to="/user/login" class="login-link" v-else>
+                登录 / 注册
+                </nuxt-link>
             </div>
         </el-row>
     </header>
