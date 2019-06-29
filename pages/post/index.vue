@@ -57,7 +57,13 @@
         <!-- 推荐关键字 -->
         <el-row class="recommend">
           <span>推荐:</span>
-          <a href="#" v-for="(item,index) in recommendList" :key="index">{{item.name}}</a>
+          <a href="#"
+           v-for="(item,index) in recommendList" 
+           :key="index" 
+           @click="handleSetSearchValue(item.name)"
+           >
+           {{item.name}}
+           </a>
         </el-row>
         <!-- 推荐攻略 -->
         <div class="strategy">
@@ -108,7 +114,7 @@ export default {
     }).then(result => {
       const { data } = result.data;
       this.menusList = data;
-    });
+    })
   },
   methods: {
     // 鼠标移入侧导航栏时事件
@@ -124,9 +130,13 @@ export default {
     },
     // 实现搜索功能
     handleSearchSubmit(){
-      console.log(11111)
       this.$store.commit('post/setSearchValue',this.searchValue)
       this.$store.dispatch('post/getList')
+      console.log(this.$store.state.post.searchValue)
+    },
+    // 点击搜索关键词时事件
+    handleSetSearchValue(value){
+      this.$store.commit('post/setSearchValue',value)
     }
   }
 };

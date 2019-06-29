@@ -51,9 +51,9 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="$store.state.post.list.currentPage +1"
+        :current-page="list.currentPage +1"
         :page-sizes="[3, 6, 9, 12]"
-        :page-size="$store.state.post.list.pagesize"
+        :page-size="list.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="$store.state.post.list.total"
       ></el-pagination>
@@ -64,10 +64,23 @@
 export default {
   data() {
     return {
-      showType: "imageText",
+      // 文章总数据
+      articleList: [],
+      // 分页器数据
+      list: {
+        currentPage: 0,
+        total: 0,
+        pageSize: 3
+      },
+      // 侦听的值
+      watchValue:this.$store.state.post.searchValue
     };
   },
   methods: {
+    // 获取文章数据
+    getList() {
+      this.$store.dispatch('post/getList')
+    },
     // 切换页面数据数量
     handleSizeChange(val) {
       this.$store.commit('post/handleSizeChange',val)
@@ -80,7 +93,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('post/getList')
+     this.$store.dispatch('post/getList')
   }
 };
 </script>
@@ -95,7 +108,7 @@ export default {
     font-size: 16px;
     color: #333;
     cursor: pointer;
-    &:hover{
+    &:hover {
       color: orange;
     }
   }
@@ -165,8 +178,8 @@ export default {
       font-size: 16px;
       color: #333;
       cursor: pointer;
-      &:hover{
-        color: orange
+      &:hover {
+        color: orange;
       }
     }
     p {
