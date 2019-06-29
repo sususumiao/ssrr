@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-for="(item,index) in articleList" :key="index">
+    <div v-for="(item,index) in $store.state.post.articleList" :key="index">
       <div class="layout1" v-if="item.images.length>1">
-        <span class="layout1Title">{{item.title}}</span>
+        <span class="layout1Title" :title="item.title">{{item.title}}</span>
         <p v-html="item.summary"></p>
         <el-row class="layout1Img">
           <nuxt-link to="/" v-for="(item2,index) in item.images" :key="index">
@@ -29,7 +29,7 @@
             </nuxt-link>
           </div>
           <div class="layout2Right">
-            <span class="layout2Title">{{item.title}}</span>
+            <span class="layout2Title" :title="item.title">{{item.title}}</span>
             <p v-html="item.summary"></p>
             <el-row class="layout2Bottom">
               <i class="el-icon-location-outline"></i>
@@ -51,11 +51,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="list.currentPage +1"
+        :current-page="$store.state.post.list.currentPage +1"
         :page-sizes="[3, 6, 9, 12]"
-        :page-size="list.pagesize"
+        :page-size="$store.state.post.list.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="list.total"
+        :total="$store.state.post.list.total"
       ></el-pagination>
     </el-row>
   </div>
@@ -64,43 +64,23 @@
 export default {
   data() {
     return {
-      articleList: [],
       showType: "imageText",
-      list: {
-        currentPage: 0,
-        total: 0,
-        pageSize: 3
-      }
     };
   },
   methods: {
+    // 切换页面数据数量
     handleSizeChange(val) {
-      console.log(val)
-      this.list.pageSize = val
-      this.getList()
+      this.$store.commit('post/handleSizeChange',val)
+      this.$store.dispatch('post/getList')
     },
+    // 切换页面方法
     handleCurrentChange(val) {
-      this.list.currentPage = this.list.pageSize*(val-1)
-      this.getList()
-    },
-    getList(){
-      const params = {
-      _start:this.list.currentPage,
-      _limit:this.list.pageSize
-    }
-      this.$axios({
-      url: "/posts",
-      params
-    }).then(result => {
-      const { data } = result.data;
-      this.articleList = data;
-      this.list.total = result.data.total;
-    });
+      this.$store.commit('post/handleCurrentChange',val)
+      this.$store.dispatch('post/getList')
     }
   },
   mounted() {
-    
-    this.getList()
+    this.$store.dispatch('post/getList')
   }
 };
 </script>
@@ -114,11 +94,16 @@ export default {
     padding: 10px 0;
     font-size: 16px;
     color: #333;
+    cursor: pointer;
+    &:hover{
+      color: orange;
+    }
   }
   p {
     font-size: 14px;
     height: 57px;
     overflow: hidden;
+    cursor: pointer;
   }
   .layout1Img {
     height: 150px;
@@ -179,11 +164,16 @@ export default {
       padding: 10px 0;
       font-size: 16px;
       color: #333;
+      cursor: pointer;
+      &:hover{
+        color: orange
+      }
     }
     p {
       font-size: 14px;
       height: 57px;
       overflow: hidden;
+      cursor: pointer;
     }
     .layout2Bottom {
       font-size: 12px;

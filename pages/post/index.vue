@@ -42,8 +42,17 @@
       <!-- 右侧内容 -->
       <div class="post-wrapper">
         <!-- 搜索框 -->
-        <el-input placeholder="请输入想去的地方，比如：“广州”" class="input-with-select" v-model="searchValue">
-          <el-button slot="append" icon="el-icon-search" type="success"></el-button>
+        <el-input 
+        placeholder="请输入想去的地方，比如：“广州”" 
+        class="input-with-select" 
+        v-model="searchValue" 
+        >
+          <el-button
+          slot="append" 
+          icon="el-icon-search" 
+          type="success" 
+          @click="handleSearchSubmit"
+          ></el-button>
         </el-input>
         <!-- 推荐关键字 -->
         <el-row class="recommend">
@@ -54,7 +63,10 @@
         <div class="strategy">
           <el-row class="strategy-title">
             <span class="orge">推荐攻略</span>
-            <el-button type="primary" icon="el-icon-edit" class="strategy-title-button">写游记</el-button>
+            <el-button 
+            type="primary" 
+            icon="el-icon-edit" 
+            class="strategy-title-button">写游记</el-button>
           </el-row>
           <el-row>
             <PostCard/>
@@ -87,27 +99,34 @@ export default {
     PostCard
   },
   mounted() {
-    // 搜索框内容与vuex里
-    console.log(this.$store.state.post.searchValue)
+    // 搜索框内容与vuex里同步
+    // console.log(this.$store.state.post.searchValue)
     this.searchValue = this.$store.state.post.searchValue
+    // 请求获取城市菜单列表
     this.$axios({
       url: "/posts/cities",
-      params:this.searchValue
     }).then(result => {
       const { data } = result.data;
       this.menusList = data;
-      // console.log(data);
     });
   },
   methods: {
+    // 鼠标移入侧导航栏时事件
     handleMenuLeave() {
       this.menusIndex = "";
       this.menusShow = false;
     },
+    // 显示子项
     handleMenuEnter(index) {
       this.menusIndex = index;
       this.menusShow = true;
       this.currentCities = this.menusList[index].children;
+    },
+    // 实现搜索功能
+    handleSearchSubmit(){
+      console.log(11111)
+      this.$store.commit('post/setSearchValue',this.searchValue)
+      this.$store.dispatch('post/getList')
     }
   }
 };
