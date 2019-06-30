@@ -10,6 +10,8 @@ export const state = () => ({
      total: 0,
      pageSize: 3
    },
+  //  保存文章id
+   articlId:""
 })
 // 设置一个更新 commin
 export const mutations = {
@@ -32,6 +34,10 @@ export const mutations = {
   // 切换页面方法
   handleCurrentChange(state,data) {
     state.list.currentPage = state.list.pageSize * (data - 1);
+  },
+  // 修改文章id
+  setArticlId(state,data){
+    state.articlId = data
   }
 }
 // 存放共同异步方法进行优化 dispatch

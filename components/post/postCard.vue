@@ -2,10 +2,10 @@
   <div>
     <div v-for="(item,index) in $store.state.post.articleList" :key="index">
       <div class="layout1" v-if="item.images.length>1">
-        <span class="layout1Title" :title="item.title">{{item.title}}</span>
+        <nuxt-link class="layout1Title" :title="item.title" :to="'/post/detail?id='+item.id">{{item.title}}</nuxt-link>
         <p v-html="item.summary"></p>
         <el-row class="layout1Img">
-          <nuxt-link to="/" v-for="(item2,index) in item.images" :key="index">
+          <nuxt-link :to="'/post/detail?id='+item.id" v-for="(item2,index) in item.images" :key="index">
             <img :src="item2">
           </nuxt-link>
         </el-row>
@@ -24,12 +24,12 @@
       <div class="layout2" v-else>
         <el-row>
           <div class="layout2Left">
-            <nuxt-link to="/" v-for="(item3,index) in item.images" :key="index">
+            <nuxt-link :to="'/post/detail?id='+item.id" v-for="(item3,index) in item.images" :key="index">
               <img :src="item3">
             </nuxt-link>
           </div>
           <div class="layout2Right">
-            <span class="layout2Title" :title="item.title">{{item.title}}</span>
+            <nuxt-link class="layout2Title" :title="item.title" :to="'/post/detail?id='+item.id">{{item.title}}</nuxt-link>
             <p v-html="item.summary"></p>
             <el-row class="layout2Bottom">
               <i class="el-icon-location-outline"></i>
@@ -71,9 +71,7 @@ export default {
         currentPage: 0,
         total: 0,
         pageSize: 3
-      },
-      // 侦听的值
-      watchValue:this.$store.state.post.searchValue
+      }
     };
   },
   methods: {
@@ -90,6 +88,10 @@ export default {
     handleCurrentChange(val) {
       this.$store.commit('post/handleCurrentChange',val)
       this.$store.dispatch('post/getList')
+    },
+    // 跳转页面
+    handlePush(id){
+      this.$router.push('/post/detail?id='+id)
     }
   },
   mounted() {
