@@ -3,7 +3,7 @@
     <div v-for="(item,index) in $store.state.post.articleList" :key="index">
       <div class="layout1" v-if="item.images.length>1">
         <nuxt-link class="layout1Title" :title="item.title" :to="'/post/detail?id='+item.id">{{item.title}}</nuxt-link>
-        <p v-html="item.summary"></p>
+        <nuxt-link :to="'/post/detail?id='+item.id"><p v-html="item.summary"></p></nuxt-link>
         <el-row class="layout1Img">
           <nuxt-link :to="'/post/detail?id='+item.id" v-for="(item2,index) in item.images" :key="index">
             <img :src="item2">
@@ -30,7 +30,7 @@
           </div>
           <div class="layout2Right">
             <nuxt-link class="layout2Title" :title="item.title" :to="'/post/detail?id='+item.id">{{item.title}}</nuxt-link>
-            <p v-html="item.summary"></p>
+            <nuxt-link :to="'/post/detail?id='+item.id"><p v-html="item.summary"></p></nuxt-link> 
             <el-row class="layout2Bottom">
               <i class="el-icon-location-outline"></i>
               <span>{{item.cityName}}&nbsp;&nbsp;&nbsp;by</span>

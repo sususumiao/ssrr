@@ -88,7 +88,7 @@ export default {
         return
       }
       const res = await this.$axios({
-        url: "http://157.122.54.189:9095/airs/city",
+        url: "/airs/city",
         params: {
           name: value
         }
@@ -181,12 +181,10 @@ export default {
       if (!valid) {
         return;
       }
-      this.$axios({
-        url: "/airs",
-        params: this.form
-      }).then(res => {
-        console.log(res);
-      });
+       this.$router.push({
+         path:'/air/flights',
+         query:this.form
+         })
     }
   },
   mounted() {}

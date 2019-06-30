@@ -15,6 +15,36 @@
         <div class="post-content">
           <div v-html="articleDetails.content"></div>
         </div>
+        <!-- 点赞，收藏功能 -->
+        <el-row class="post-function" justify="center" type="flex">
+          <ul>
+            <li>
+              <i class="iconfont iconpinglun"></i>
+              <p>评价(13)</p>
+            </li>
+            <li>
+              <i class="iconfont iconstar1"></i>
+              <p>收藏</p>
+            </li>
+            <li>
+              <i class="iconfont iconfenxiang"></i>
+              <p>分享</p>
+            </li>
+            <li>
+              <i class="iconfont iconding"></i>
+              <p>点赞(1)</p>
+            </li>
+          </ul>
+        </el-row>
+        <!-- 评论功能结构 -->
+        <div class="post-comment">
+          <div class="comment-title">评论</div>
+          <el-input type="textarea" 
+          :rows="4" 
+          placeholder="请输入内容" 
+          v-model="textarea"
+          :autosize="{minRows: 2, maxRows: 6}"></el-input>
+        </div>
       </div>
       <!-- 右侧内容 -->
       <div class="correlation-wrapper">
@@ -44,7 +74,7 @@ export default {
   data() {
     return {
       // 文章详情数据
-      articleDetails:{},
+      articleDetails: {},
       //   攻略列表
       strategyList: [
         {
@@ -55,19 +85,21 @@ export default {
           },
           watch: ""
         }
-      ]
+      ],
+    //   评论的数据
+    textarea:""
     };
   },
   mounted() {
     //   获取文章详情
-    const {id} = this.$route.query
+    const { id } = this.$route.query;
     this.$axios({
       url: "/posts",
       params: {
         id: id
       }
     }).then(res => {
-      const { data } = res.data
+      const { data } = res.data;
       this.articleDetails = data[0];
     });
     // 获取相关攻略
@@ -76,7 +108,6 @@ export default {
     }).then(res => {
       const { data } = res.data;
       this.strategyList = data;
-      console.log(data);
     });
   }
 };
@@ -116,6 +147,26 @@ export default {
       }
       /deep/img {
         padding: 10px 0;
+      }
+    }
+    .post-function {
+      ul {
+        li {
+          float: left;
+          padding: 20px;
+          text-align: center;
+          cursor: pointer;
+          i {
+            display: inline-block;
+            padding-bottom: 10px;
+            font-size: 28px;
+            color: orange;
+          }
+          p {
+            font-size: 14px;
+            color: #999;
+          }
+        }
       }
     }
   }
