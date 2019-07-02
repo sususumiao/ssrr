@@ -15,7 +15,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css'} // 新增全局字体样式
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' } // 新增全局字体样式
     ]
   },
 
@@ -29,7 +29,10 @@ export default {
   */
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    'assets/main.css' // 新增自定义的页面过渡样式（文件来自3.4.1）
+    'assets/main.css', // 新增自定义的页面过渡样式（文件来自3.4.1）
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css'
   ],
 
   /*
@@ -37,9 +40,12 @@ export default {
   */
   plugins: [
     // '@/plugins/element-ui'
-    { src: '@/plugins/element-ui', ssr: true},
+    { src: '@/plugins/element-ui', ssr: true },
     { src: '@/plugins/localStorage', ssr: false },
-    '@/plugins/axios'
+    '@/plugins/axios',
+    // 配置vue-quill-editor
+    { src: '@/plugins/nuxt-quill-plugin.js', ssr: false }
+
   ],
 
   /*

@@ -72,7 +72,8 @@
             <el-button 
             type="primary" 
             icon="el-icon-edit" 
-            class="strategy-title-button">写游记</el-button>
+            class="strategy-title-button"
+            @click="handelPushCreate">写游记</el-button>
           </el-row>
           <el-row>
             <PostCard/>
@@ -137,6 +138,10 @@ export default {
     // 点击搜索关键词时事件
     handleSetSearchValue(value){
       this.$store.commit('post/setSearchValue',value)
+    },
+    // 写文件事件
+    handelPushCreate(){
+      this.$router.push('/post/create')
     }
   }
 };
