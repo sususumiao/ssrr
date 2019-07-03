@@ -29,7 +29,11 @@
       <h2>保险</h2>
       <div>
         <div class="insurance-item" v-for="(item,index) in ticketList.insurances" :key="index">
-          <el-checkbox :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.price}万`" border @change="handelGetId(item.id)"></el-checkbox>
+          <el-checkbox
+            :label="`${item.type}：￥${item.price}/份×1  最高赔付${item.price}万`"
+            border
+            @change="handelGetId(item.id)"
+          ></el-checkbox>
         </div>
       </div>
     </div>
@@ -57,6 +61,7 @@
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
       </div>
     </div>
+    <input type="hidden" v-model="allPrice" />>
   </div>
 </template>
 
@@ -72,15 +77,17 @@ export default {
         }
       ],
       // 保险id
-      insurances:[],
-      contactName:"",//联系人名字
-      contactPhone:"",//联系人电话
-      invoice:false,//是否需要发票
-      captcha:'000000',//验证码
-      ticketList: []
+      insurances: [],
+      contactName: "", //联系人名字
+      contactPhone: "", //联系人电话
+      invoice: false, //是否需要发票
+      captcha: "000000", //验证码
+      ticketList: {
+        seat_infos:{}
+      }
     };
   },
-  
+
   methods: {
     // 添加乘机人
     handleAddUsers() {
@@ -92,51 +99,65 @@ export default {
 
     // 移除乘机人
     handleDeleteUser(index) {
-        this.personalList.splice(index,1)
+      this.personalList.splice(index, 1);
     },
     //选择保险
-    handelGetId(id){
-      const index = this.insurances.indexOf(id)
-      if(index === -1){
-        this.insurances.push(id)
-      }else{
-        this.insurances.splice(index,1)
+    handelGetId(id) {
+      const index = this.insurances.indexOf(id);
+      if (index === -1) {
+        this.insurances.push(id);
+      } else {
+        this.insurances.splice(index, 1);
       }
     },
     // 发送手机验证码
     handleSendCaptcha() {
-      this.$store.dispatch('air/getVerification',this.contactPhone)
+      this.$store.dispatch("air/getVerification", this.contactPhone);
     },
 
     // 提交订单
     handleSubmit() {
-      const {id,seat_xid} = this.$route.query
-      const data ={
-        users:this.personalList,
-        insurances:this.insurances,
-        contactName:this.contactName,
-        contactPhone:this.contactPhone,
-        invoice:this.invoice,
-        captcha:this.captcha,
-        air:id,
-        seat_xid 
-      }
+      const { id, seat_xid } = this.$route.query;
+      const data = {
+        users: this.personalList,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: this.invoice,
+        captcha: this.captcha,
+        air: id,
+        seat_xid
+      };
       this.$axios({
-        url:'/airorders',
-        method:'POST',
+        url: "/airorders",
+        method: "POST",
         data,
-        headers:{
-          Authorization:`Bearer ${this.$store.state.user.userInfo.token}`
+        headers: {
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res=>{
-        if(res.status === 200){
-          this.$message.success(res.data.message)
+      }).then(res => {
+        if (res.status === 200) {
+          this.$message.success(res.data.message);
         }
-
-      })
+      });
     }
   },
-  mounted(){
+  computed: {
+    allPrice() {
+      let picer = 0;
+      // 个人人机票钱
+      picer += this.ticketList.seat_infos.org_settle_price;
+      // 机建价格
+      picer += this.ticketList.airport_tax_audlet;
+      // 保险价格
+      picer += 30 * this.insurances.length;
+      // 乘机人
+      picer *=  this.personalList.length;
+      this.$emit('setAllPrice',picer)
+      return picer;
+    }
+  },
+  mounted() {
     const { id, seat_xid } = this.$route.query;
     this.$axios({
       url: `/airs/${id}`,
@@ -145,6 +166,7 @@ export default {
       }
     }).then(res => {
       this.ticketList = res.data;
+      this.$emit("setTicketList", this.ticketList);
     });
   }
 };

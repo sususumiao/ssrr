@@ -2,11 +2,11 @@
   <div class="container">
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
-      <OrderForm />
+      <OrderForm @setTicketList="setTicketList" @setAllPrice="setAllPrice"/>
 
       <!-- 侧边栏 -->
       <div class="aside">
-        <OrderAside />
+        <OrderAside  :data="getTicketList" :all="allPrice"/>
       </div>
     </el-row>
   </div>
@@ -18,13 +18,19 @@ import OrderAside from "@/components/air/orderAside.vue";
 export default {
   data() {
     return {
-      getTicketList: []
+      getTicketList:{
+        seat_infos:{}
+      },
+      allPrice:0
     };
   },
   methods: {
-    
-  },
-  mounted() {
+    setTicketList(data){
+      this.getTicketList = data
+    },
+    setAllPrice(data){
+      this.allPrice = data
+    }
   },
   components: {
     OrderForm,
