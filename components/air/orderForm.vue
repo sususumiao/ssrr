@@ -137,7 +137,17 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) {
-          this.$message.success(res.data.message);
+          this.$message.success("正在生成订单，请稍后...");
+          setInterval(()=>{
+            const {id} = res.data.data
+            this.$router.push({
+              path:'/air/pay',
+              query:{
+                id
+                }
+            })
+          },100)
+          
         }
       });
     }
