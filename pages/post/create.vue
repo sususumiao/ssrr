@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       editorOption: {
-        //   富文本框图标
+        //   富文本框图标配置
         modules: {
           toolbar: [
             [

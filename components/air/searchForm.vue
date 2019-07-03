@@ -74,37 +74,36 @@ export default {
     };
   },
   methods: {
-    
-    /** 
+    /**
      * 加载查询机票时城市列表
      * @param {String} value 输入的值 ,city 城市名称 , code 城市编码 cb 回调函数
      * @return {Array}
-      */
+     */
 
     // 封装请求城市方法
-    async getList(value,city,code, cb) {
+    async getList(value, city, code, cb) {
       // 输入框为空时不触发此事件
       if (!value) {
-        return
+        return;
       }
       const res = await this.$axios({
         url: "/airs/city",
         params: {
           name: value
         }
-      })
+      });
       const { data } = res.data;
       const newData = data.map(v => {
         return {
           ...v,
           value: v.name.replace("市", "")
-        }
-      })
-      if(newData.length >0){
-        this.form.city = newData[0].value
-        this.form.code = newData[0].sort
+        };
+      });
+      if (newData.length > 0) {
+        this.form.city = newData[0].value;
+        this.form.code = newData[0].sort;
       }
-      cb(newData)
+      cb(newData);
     },
 
     // tab切换时触发
@@ -114,13 +113,13 @@ export default {
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDepartSearch(value, cb) {
       // 输入框为空时不触发此事件
-      this.getList(value,this.form.departCity,this.form.departCode,cb)
+      this.getList(value, this.form.departCity, this.form.departCode, cb);
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value,cb) {
-     this.getList(value,this.form.destCity,this.form.destCode ,cb)
+    queryDestSearch(value, cb) {
+      this.getList(value, this.form.destCity, this.form.destCode, cb);
     },
 
     // 出发城市下拉选择时触发
@@ -181,10 +180,14 @@ export default {
       if (!valid) {
         return;
       }
-       this.$router.push({
-         path:'/air/flights',
-         query:this.form
-         })
+      this.$router.push({
+        path: "/air/flights",
+        query: this.form
+      });
+      // 保存到本地
+      const localAirs = JSON.parse(localStorage.getItem('getFlights')||`[]`)
+      localAirs.unshift(this.form);
+      localStorage.setItem("getFlights",JSON.stringify(localAirs));
     }
   },
   mounted() {}

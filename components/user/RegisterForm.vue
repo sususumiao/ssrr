@@ -72,19 +72,10 @@ export default {
   },
   methods: {
     // 发送验证码
+    
     handleSendCaptcha() {
         // 点击获取验证码
-        this.$axios({
-            url:'/captchas',
-            method:"POST",
-            data:{
-                tel:this.form.username
-            }
-        }).then(res=>{
-            const{data} = res
-            this.$message('验证码为：'+data.code+"请赶紧输入。")
-            
-        })
+       this.$store.dispatch('air/getVerification',this.form.username)
     },
 
     // 注册

@@ -71,7 +71,71 @@
           </el-row>
         </div>
         <!-- 评论列表 -->
-        <div class="post-list"></div>
+        <div class="post-list">
+          <div v-for="(item,index) in commentList" :key="index">
+            <!-- 一楼模块 -->
+            <div class="list-one" v-if="!item.parent">
+              <el-row>
+                <el-avatar :src="$axios.defaults.baseURL + item.account.defaultAvatar"></el-avatar>
+                <span>{{item.account.nickname}}</span>
+                <em>2019-07-01 4:38</em>
+                <i>{{item.level}}</i>
+              </el-row>
+              <div class="list-content-one">
+                <p>{{item.content}}</p>
+                <img
+                  v-for="(item2,index) in item.pics"
+                  :key="index"
+                  :src="$axios.defaults.baseURL + item2.url"
+                />
+              </div>
+            </div>
+            <!-- 二楼模块 -->
+            <div class="list-tow" v-else>
+              <el-row>
+                <el-avatar :src="$axios.defaults.baseURL + item.account.defaultAvatar"></el-avatar>
+                <span>{{item.account.nickname}}</span>
+                <em>2019-07-01 4:38</em>
+                <i>{{item.level}}</i>
+              </el-row>
+              <div class="list-tow-record">
+                <el-row>
+                  <span>{{item.parent.account.nickname}}</span>
+                  <em>2019-07-01 4:38</em>
+                  <i>{{item.parent.level}}</i>
+                </el-row>
+                <div class="list-tow-record-content">
+                  <p>{{item.parent.content}}</p>
+                  <img
+                    v-for="(item3,index) in item.parent.pics"
+                    :key="index"
+                    :src="$axios.defaults.baseURL + item3.url"
+                  />
+                </div>
+              </div>
+              <div class="list-content-two">
+                <p>{{item.content}}</p>
+                <img
+                  v-for="(item2,index) in item.pics"
+                  :key="index"
+                  :src="$axios.defaults.baseURL + item2.url"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 分页器 -->
+        <el-row type="flex" justify="space-between">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageIndex"
+            :page-sizes="[2, 4, 6, 8]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+          ></el-pagination>
+        </el-row>
       </div>
       <!-- 右侧内容 -->
       <div class="correlation-wrapper">
@@ -119,8 +183,14 @@ export default {
           watch: ""
         }
       ],
+      // 获取评论
+      commentList: [],
       //   评论的数据
-      textarea: ""
+      textarea: "",
+      // 分页器
+      pageIndex:1,
+      pageSize:2,
+      total:0,
     };
   },
   methods: {
@@ -204,6 +274,16 @@ export default {
         }
       });
     },
+    // 切换页面事件
+    handleCurrentChange(val) {
+      this.pageIndex = val
+      this.getPostsComment()
+    },
+    // 切换页面数据条数事件
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.getPostsComment()
+    },
     //   获取文章详情
     getPosts() {
       const { id } = this.$route.query;
@@ -216,6 +296,22 @@ export default {
         const { data } = res.data;
         this.articleDetails = data[0];
       });
+    },
+    // 获取文章评论
+    getPostsComment(){
+       const { id } = this.$route.query;
+    this.$axios({
+      url: "/posts/comments",
+      params: {
+        post: id,
+        _limit: this.pageSize,
+        _start: this.pageIndex -1
+      }
+    }).then(res => {
+      const { data } = res.data;
+      this.commentList = data;
+      this.total = res.data.total
+    });
     }
   },
   mounted() {
@@ -228,6 +324,8 @@ export default {
       const { data } = res.data;
       this.strategyList = data;
     });
+    // 获取相关的评论
+   this.getPostsComment();
   }
 };
 </script>
@@ -293,6 +391,91 @@ export default {
         margin-top: 20px;
         .button {
           height: 40px;
+        }
+      }
+    }
+    .post-list {
+      margin-top: 20px;
+      border: 1px solid #aaa;
+      > div {
+        .list-one {
+          padding: 20px;
+          border-bottom: 1px dashed #ccc;
+          span {
+            font-size: 14px;
+            color: #333;
+          }
+          em {
+            font-size: 12px;
+            color: #666;
+          }
+          i {
+            float: right;
+            font-size: 14px;
+            color: #333;
+          }
+          .list-content-one {
+            padding: 10px 10px 5px 40px;
+            p {
+              padding: 10px 0;
+            }
+            img {
+              width: 80px;
+              height: 80px;
+              padding: 3px;
+              border: 1px dashed #ccc;
+              border-radius: 8px;
+            }
+          }
+        }
+        .list-tow {
+          padding: 20px;
+          border-bottom: 1px dashed #ccc;
+          span {
+            font-size: 14px;
+            color: #333;
+          }
+          em {
+            font-size: 12px;
+            color: #666;
+          }
+          i {
+            float: right;
+            font-size: 14px;
+            color: #333;
+          }
+          .list-tow-record {
+            margin-top: 10px;
+            margin-left: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: rgb(249, 249, 249);
+            .list-tow-record-content {
+              p {
+                padding: 10px 0;
+              }
+              img {
+                width: 80px;
+                height: 80px;
+                padding: 3px;
+                border: 1px dashed #ccc;
+                border-radius: 8px;
+              }
+            }
+          }
+          .list-content-two {
+            padding: 10px 10px 5px 40px;
+            p {
+              padding: 10px 0;
+            }
+            img {
+              width: 80px;
+              height: 80px;
+              padding: 3px;
+              border: 1px dashed #ccc;
+              border-radius: 8px;
+            }
+          }
         }
       }
     }
